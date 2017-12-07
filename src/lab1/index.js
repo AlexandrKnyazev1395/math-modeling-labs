@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import StatisticalSeries from './StatisticalSeries';
 import StatisticalFunction from './StatisticalFunction';
-import { isNumber } from 'util';
 
 class Lab1 extends Component {
   constructor(props) {
@@ -10,43 +9,62 @@ class Lab1 extends Component {
       mode: 1,
       amountTests: 10,
       handleInputValue: "",
-      randValues: [],
-      dispersion: 0,
-      mathDelayEstimate: 0,
-      meanSquareDeviation: 0,
+      randValues: this.props.params.randValues,
+      dispersion: this.props.params.dispersion,
+      mathDelayEstimate: this.props.params.mathDelayEstimate,
+      meanSquareDeviation: this.props.params.meanSquareDeviation,
       rangeOfVariation: 0,
       areaSize: 0,
-      areas: [],
-      numbersInInterval: []
+      areas:  this.props.params.areas,
+      numbersInInterval: this.props.params.numbersInInterval
     }
     this.randValueGenerating = this.randValueGenerating.bind(this)
   }
 
   componentWillMount = () => {
-    let randValues = this.randValueGenerating(this.state.amountTests);
-    let mathDelayEstimate = this.calculateMathDelayEstimate(randValues, this.state.amountTests);
-    let meanSquareDeviation = this.calculateMeanSquareDeviation(randValues, this.state.amountTests, mathDelayEstimate);
-    let dispersion = this.calculateDispersion(meanSquareDeviation);
+    let randValues = this.state.randValues;
+    if(!this.state.randValues.length) {
+      randValues = this.randValueGenerating(this.state.amountTests);
+      debugger;
+      var mathDelayEstimate = this.calculateMathDelayEstimate(randValues, this.state.amountTests);
+      var meanSquareDeviation = this.calculateMeanSquareDeviation(randValues, this.state.amountTests, mathDelayEstimate);
+      var dispersion = this.calculateDispersion(meanSquareDeviation);
+    }
     let rangeOfVariation = this.calculateRangeOfVariation(randValues);
     let areaSize = this.calculateAreaSize(this.state.amountTests, rangeOfVariation);
     let areas = this.calculateAreas(randValues, this.state.amountTests, areaSize);
     let numbersInInterval = this.calculateNumbersInInterval(randValues, this.state.amountTests, areas);
-    this.props.setParams({
-      randValues,
-      mathDelayEstimate,
-      meanSquareDeviation,
-      dispersion,
-    })
-    this.setState({
-      randValues,
-      mathDelayEstimate,
-      meanSquareDeviation,
-      dispersion,
-      rangeOfVariation,
-      areaSize,
-      areas,
-      numbersInInterval
-    });
+    if(!this.state.randValues.length) {
+      this.props.setParams({
+        randValues,
+        mathDelayEstimate,
+        meanSquareDeviation,
+        dispersion,
+        areas,
+        numbersInInterval
+      })
+      this.setState({
+        randValues,
+        amountTests: randValues.length,
+        mathDelayEstimate,
+        meanSquareDeviation,
+        dispersion,
+        rangeOfVariation,
+        areaSize,
+        areas,
+        numbersInInterval
+      })
+      return;
+    }
+    else {
+      this.setState({
+        rangeOfVariation,
+        areaSize,
+        areas,
+        numbersInInterval
+      });
+    }
+
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -63,6 +81,8 @@ class Lab1 extends Component {
         mathDelayEstimate,
         meanSquareDeviation,
         dispersion,
+        areas,
+        numbersInInterval
       })
       this.setState({
         amountTests: nextState.amountTests,
@@ -135,7 +155,7 @@ class Lab1 extends Component {
     for (let el of randValues) {
       tempSumm += Math.pow((el - mathDelayEstimate), 2)
     }
-    let meanSquareDeviation = Math.sqrt(tempSumm / (amountTests - 1));
+    let meanSquareDeviation = Math.sqrt(tempSumm / randValues.length);
     return meanSquareDeviation;
   }
 

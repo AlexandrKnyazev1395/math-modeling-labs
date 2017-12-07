@@ -6,8 +6,9 @@ import {
 } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
-import Lab1 from './lab1'
+import Lab1 from './lab1';
 import Lab2 from './lab2';
+import Lab3 from './lab3';
 
 class App extends Component {
   constructor(props) {
@@ -18,6 +19,8 @@ class App extends Component {
       mathDelayEstimate: 0,
       meanSquareDeviation: 0,
       dispersion: 0,
+      areas: [],
+      numbersInInterval: []
     }
   }
 
@@ -37,14 +40,18 @@ class App extends Component {
             <ul className="App-routes">
               <li><Link to="/">Лабораторная 1</Link></li>
               <li><Link to="/lab2">Лабораторная 2</Link></li>
+              <li><Link to="/lab3">Лабораторная 3</Link></li>
             </ul>
           </header>
 
           <Route exact path="/" render={(props) => (
-            <Lab1 {...props} setParams={this.setParams} />
+            <Lab1 {...props} params = {this.state} setParams={this.setParams} />
           )} />
           <Route exact path="/lab2" render={(props) => (
             <Lab2 {...props} setParams={this.setParams} params={this.state} />
+          )} />
+          <Route exact path="/lab3" render={(props) => (
+            <Lab3 {...props} setParams={this.setParams} params={this.state} />
           )} />
         </div>
       </Router>
