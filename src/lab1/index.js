@@ -20,12 +20,11 @@ class Lab1 extends Component {
     }
     this.randValueGenerating = this.randValueGenerating.bind(this)
   }
-
+  
   componentWillMount = () => {
     let randValues = this.state.randValues;
     if(!this.state.randValues.length) {
       randValues = this.randValueGenerating(this.state.amountTests);
-      debugger;
       var mathDelayEstimate = this.calculateMathDelayEstimate(randValues, this.state.amountTests);
       var meanSquareDeviation = this.calculateMeanSquareDeviation(randValues, this.state.amountTests, mathDelayEstimate);
       var dispersion = this.calculateDispersion(meanSquareDeviation);
@@ -66,6 +65,7 @@ class Lab1 extends Component {
     }
 
   }
+
 
   componentWillUpdate(nextProps, nextState) {
     if (nextState.randValues != this.state.randValues) {

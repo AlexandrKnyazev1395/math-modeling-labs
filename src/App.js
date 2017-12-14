@@ -24,7 +24,6 @@ class App extends Component {
     }
   }
 
-
   setParams = (params) => {
     this.setState(params)
   }
@@ -51,7 +50,7 @@ class App extends Component {
             <Lab2 {...props} setParams={this.setParams} params={this.state} />
           )} />
           <Route exact path="/lab3" render={(props) => (
-            <Lab3 {...props} setParams={this.setParams} params={this.state} />
+            <Lab3 {...props}  setParams={this.setParams} params={this.state} />
           )} />
         </div>
       </Router>
