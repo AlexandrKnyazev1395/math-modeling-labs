@@ -1,6 +1,33 @@
 import React, { Component } from 'react';
-
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import 'react-bootstrap-table/css/react-bootstrap-table.css'
 import laplaceTable from './laplaceTable';
+
+import './index.css';
+
+class TableProbabilities extends Component {
+  render() {
+    let data1 = [];
+    let data2 = [];
+
+    data1 = this.props.probabilities.map( (el, index) => {
+      data2.push(<td>{ el.P.toFixed(2) }</td>)
+      return  <td> {el.a.toFixed(2) + ' - ' + el.b.toFixed(2)} </td>;
+    })
+    return (
+      <table className="table-p">
+        <tr>
+          <td> Interval </td>
+          {data1}
+        </tr>
+        <tr>
+          <td> Probability </td>
+          {data2}
+        </tr>
+      </table>
+    )
+  }
+}
 
 class Lab3 extends Component {
   constructor(props) {
@@ -27,17 +54,14 @@ class Lab3 extends Component {
       for (let el of probabilities) {
         probabilitiesSumm += el.P;
       }
-      if(probabilitiesSumm < 0.989) {
+      if (probabilitiesSumm < 0.989) {
         let different = 0.989 - probabilitiesSumm;
         let everyPlus = different / probabilities.length;
-        for(let el of probabilities) {
+        for (let el of probabilities) {
           el.P += everyPlus;
         }
       }
-      let check = 0;
-      for (let el of probabilities) {
-        check += el.P;
-      }
+      this.props.changeProbabilities(probabilities);
     }
 
   }
@@ -61,7 +85,7 @@ class Lab3 extends Component {
 
   laplass(x) {
     let positive = Math.abs(x);
-    if(positive> 5) {
+    if (positive > 5) {
       positive = 5;
     }
     positive = Math.round(parseFloat(positive) * 100) / 100
@@ -69,21 +93,18 @@ class Lab3 extends Component {
     //don't tell anyone about this terrible)))
     if (laplaceValue === NaN) {
       for (let y = 0; y < 10; y++) {
-        positive+= 0.01;
+        positive += 0.01;
         laplaceValue = laplaceTable[positive];
         if (laplaceValue !== NaN) {
           break;
         }
       }
     }
-    if(x < 0) {
+    if (x < 0) {
       laplaceValue = -Math.abs(laplaceValue)
     }
     return laplaceValue;
   }
-
-
-
 
   render() {
     let {
@@ -95,7 +116,7 @@ class Lab3 extends Component {
       numbersInInterval
     } = this.props.params;
 
-    areas = areas.join(' - ');
+
     return (
       <div className="lab">
         <h4> Лабораторная работа №3
@@ -107,7 +128,8 @@ class Lab3 extends Component {
               <span>Случайная величина X:  {randValues.join(';')} </span>
               <br />
               <br />
-              <span> Координаты интервалов (округлено) : {areas} </span>
+              <span> Теоретические частоты попадания случайной величины в интервалы: </span>
+              <TableProbabilities probabilities={this.props.params.probabilities}/>
             </div>
             : "Сгенерируйте последовательность в лабораторной работе 1"
         }

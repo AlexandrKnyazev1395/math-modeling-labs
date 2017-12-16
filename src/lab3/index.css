@@ -1,0 +1,11 @@
+.table-p {
+  border-collapse: collapse
+
+}
+
+
+.table-p td{
+  padding: 10px;
+  border: 1px solid grey;
+  
+}
