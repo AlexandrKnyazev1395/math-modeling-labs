@@ -1,1 +1,2 @@
-Project for math-modeling classed in SRSTU
+
+My "math modeling" laboratory works in SRSTU.
